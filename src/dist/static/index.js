@@ -64,47 +64,106 @@ class MyWidget extends Backbone.Marionette.View {
 
 const template2 = function (data) {
 
-    var html = "<h2 class='widget__title'>HOLA " + this.model.attributes.coverageLevel + "</h2></br>";
+    var html = "";
+
+    var initDiv = document.createElement("div");
+    initDiv.setAttribute("class", "container");
 
     var div = document.createElement("div");
-    div.setAttribute("width", "200");
+    div.setAttribute("class", "row");
+    div.setAttribute("style", "display: flex");
+
+    var textDiv = document.createElement("div");
+    textDiv.setAttribute("class", "col");
+    textDiv.setAttribute("style", "width: 50%;");
+
+    var titleCoverage = document.createElement("h2");
+    titleCoverage.setAttribute("class", "widget__title");
+    titleCoverage.appendChild(document.createTextNode("coverage"));
+
+    var levelText = document.createElement("p");
+    levelText.appendChild(document.createTextNode("Level of coverage: " + this.model.attributes.coverageLevel));
+
+    var legendTitle = document.createElement("p");
+    legendTitle.appendChild(document.createTextNode("Chart's sections:"));
+
+    var legendList = document.createElement("ul");
+
+    var outerLi = document.createElement("li");
+    outerLi.setAttribute("style", "margin-bottom: 1%;");
+    outerLi.appendChild(document.createTextNode("Outer: Total coverage"));
+
+    var middleLi = document.createElement("li");
+    middleLi.setAttribute("style", "margin-bottom: 1%;");
+    middleLi.appendChild(document.createTextNode("Middle: Input coverage"));
+
+    var innerLi = document.createElement("li");
+    innerLi.appendChild(document.createTextNode("Inner: Output coverage"));
+
+    legendList.appendChild(outerLi);
+    legendList.appendChild(middleLi);
+    legendList.appendChild(innerLi);
+
+    var chartDiv = document.createElement("div");
+    chartDiv.setAttribute("class", "col");
+    chartDiv.setAttribute("style", "width: 50%;");
 
     var canvas = document.createElement("canvas");
     canvas.setAttribute("id", "myChart");
-    canvas.setAttribute("width", "50%");
-    canvas.setAttribute("height", "50%");
+    canvas.setAttribute("style", "margin-bottom: 4%; max-width: 545px; max-height: 285px;");
 
-    div.appendChild(canvas);
+    chartDiv.appendChild(canvas);
     var ctx = canvas.getContext('2d');
 
     var chart = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: [
-            'Red',
-            'Blue',
-            'Yellow'
+            'Covered',
+            'Not covered'
             ],
-            datasets: [{
-            label: 'My First Dataset',
-            data: [300, 50, 100],
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-            ],
-            hoverOffset: 4
-            }]
+            datasets: [
+                {
+                    data: [this.model.attributes.totalCoverage.toFixed(2), (100-this.model.attributes.totalCoverage).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                },
+                {
+                    data: [this.model.attributes.inputCoverage.toFixed(2), (100-this.model.attributes.inputCoverage).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                }, 
+                {
+                    data: [this.model.attributes.outputCoverage.toFixed(2), (100-this.model.attributes.outputCoverage).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                }
+            ]
+        },
+        options: {
+            legend: false
         }
     });
 
+    textDiv.appendChild(titleCoverage);
+    textDiv.appendChild(levelText);
+    textDiv.appendChild(legendTitle);
+    textDiv.appendChild(legendList);
+
+    div.appendChild(textDiv);
+    div.appendChild(chartDiv);
+
+    initDiv.appendChild(div);
+
     var divs = document.querySelectorAll("[data-id='coverage']");
     var divToAdd = divs[0].children[1];
-    divToAdd.appendChild(div);
-
-    //console.log(divs[0].children[1].outerHTML);
-
-    //html = html;
+    divToAdd.appendChild(initDiv);
 
     return html;
 }
