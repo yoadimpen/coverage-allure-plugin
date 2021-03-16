@@ -1,0 +1,9 @@
+id: coverage-plugin
+name: Coverage
+description: Information about the coverage
+extensions:
+- coverage.CoveragePlugin
+jsFiles:
+- index.js
+cssFiles:
+- styles.css
