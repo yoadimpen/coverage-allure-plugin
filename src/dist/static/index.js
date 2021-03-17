@@ -11,7 +11,7 @@ class MyLayout extends allure.components.AppLayout {
     }
 
     loadData() {
-        return this.model.fetch();
+        //return this.model.fetch();
     }
 
     getContentView() {
