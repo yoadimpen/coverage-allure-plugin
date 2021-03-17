@@ -55,6 +55,8 @@ class MyWidget extends Backbone.Marionette.View {
     }
 }
 
+//scrap code for sprint 4 - coverage tab
+
 /*allure.api.addWidget('widgets', 'coverage', allure.components.WidgetStatusView.extend({
     rowTag: 'a',
     title: 'coverage',
