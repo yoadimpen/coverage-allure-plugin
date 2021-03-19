@@ -153,43 +153,16 @@ const template2 = function (data) {
 
     var dataRow2 = document.createElement("div");
     dataRow2.setAttribute("class", "row");
-    dataRow2.setAttribute("style", "margin-bottom: 5%; display: flex; position: relative;");
+    dataRow2.setAttribute("style", "margin-bottom: 5%");
 
     var totalChartDiv = document.createElement("div");
     totalChartDiv.setAttribute("class", "col");
-    totalChartDiv.setAttribute("style", "width: 33.3%");
 
-    var p1 = document.createElement("p");
-    p1.setAttribute("style", "position: absolute; top: 50%; left: 17%; transform: translate(-50%, -50%); text-align: center; font-size: 110%");
-    p1.appendChild(document.createTextNode("99.99%"));
-
-    var inputChartDiv = document.createElement("div");
-    inputChartDiv.setAttribute("class", "col");
-    inputChartDiv.setAttribute("style", "width: 33.3%");
-
-    var p2 = document.createElement("p");
-    p2.setAttribute("style", "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 110%");
-    p2.appendChild(document.createTextNode("99.99%"));
-
-    var outputChartDiv = document.createElement("div");
-    outputChartDiv.setAttribute("class", "col");
-    outputChartDiv.setAttribute("style", "width: 33.3%");
-
-    var p3 = document.createElement("p");
-    p3.setAttribute("style", "position: absolute; top: 50%; left: 83.5%; transform: translate(-50%, -50%); text-align: center; font-size: 110%");
-    p3.appendChild(document.createTextNode("99.99%"));
-
-    var inputChartCanvas = document.createElement("canvas");
-    var outputChartCanvas = document.createElement("canvas");
     var totalChartCanvas = document.createElement("canvas");
 
-    inputChartDiv.appendChild(inputChartCanvas);
-    outputChartDiv.appendChild(outputChartCanvas);
     totalChartDiv.appendChild(totalChartCanvas);
 
     var totalctx = totalChartCanvas.getContext("2d");
-    var inputctx = inputChartCanvas.getContext("2d");
-    var outputctx = outputChartCanvas.getContext("2d");
 
     var totalChart = new Chart(totalctx, {
         type: 'doughnut',
@@ -216,9 +189,34 @@ const template2 = function (data) {
             },
             legend: false,
             cutoutPercentage: 70,
-            aspectRatio: 1
+            aspectRatio: 2
         }
     })
+
+    dataRow2.appendChild(totalChartDiv);
+
+    /////////////////////
+
+    var dataRow3 = document.createElement("div");
+    dataRow3.setAttribute("class", "row");
+    dataRow3.setAttribute("style", "margin-bottom: 5%; display: flex");
+
+    var inputChartDiv = document.createElement("div");
+    inputChartDiv.setAttribute("class", "col");
+    inputChartDiv.setAttribute("style", "width: 50%");
+
+    var outputChartDiv = document.createElement("div");
+    outputChartDiv.setAttribute("class", "col");
+    outputChartDiv.setAttribute("style", "width: 50%");
+
+    var inputChartCanvas = document.createElement("canvas");
+    var outputChartCanvas = document.createElement("canvas");
+
+    inputChartDiv.appendChild(inputChartCanvas);
+    outputChartDiv.appendChild(outputChartCanvas);
+
+    var inputctx = inputChartCanvas.getContext("2d");
+    var outputctx = outputChartCanvas.getContext("2d");
 
     var inputChart = new Chart(inputctx, {
         type: 'doughnut',
@@ -278,12 +276,8 @@ const template2 = function (data) {
         }
     })
 
-    dataRow2.appendChild(totalChartDiv);
-    dataRow2.appendChild(inputChartDiv);
-    dataRow2.appendChild(outputChartDiv);
-    dataRow2.appendChild(p1);
-    dataRow2.appendChild(p2);
-    dataRow2.appendChild(p3);
+    dataRow3.appendChild(inputChartDiv);
+    dataRow3.appendChild(outputChartDiv);
 
     /////////////////////
     
@@ -293,6 +287,7 @@ const template2 = function (data) {
 
     div.appendChild(dataRow1);
     div.appendChild(dataRow2);
+    div.appendChild(dataRow3);
 
     var divs = document.querySelectorAll("[data-id='coverage']");
     var divToAdd = divs[0].children[1];
