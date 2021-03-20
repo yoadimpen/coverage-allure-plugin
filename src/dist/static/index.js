@@ -55,12 +55,34 @@ class MyWidget extends Backbone.Marionette.View {
     }
 }
 
+/////////////////////
+
 /*allure.api.addWidget('widgets', 'coverage', allure.components.WidgetStatusView.extend({
     rowTag: 'a',
     title: 'coverage',
     baseUrl: 'coverage',
     showAll: true
 }));*/
+
+/////////////////////
+
+function formatPercentage(value){
+    var res = "";
+
+    var numbers = value.toFixed(2).toString().split(".");
+
+    res = res + numbers[0].trim();
+
+    if(numbers[1] != 0){
+        res = res + "." + numbers[1].trim();
+    }
+
+    res = res + "%";
+
+    return res;
+}
+
+/////////////////////
 
 const template2 = function (data) {
 
@@ -101,13 +123,19 @@ const template2 = function (data) {
 
     var levelctx = levelChartCanvas.getContext("2d");
 
+    var gradient = levelctx.createLinearGradient(0, 0, 600, 0);
+    gradient.addColorStop(0, '#fd5a3e');
+    gradient.addColorStop(0.5, '#ffd050');
+    gradient.addColorStop(1, '#97cc64');
+
     var levelChart = new Chart(levelctx, {
         type: 'horizontalBar',
         data: {
             labels:[ "Test Coverage Level"],
             datasets: [
                 {
-                    data: [this.model.attributes.coverageLevel]
+                    data: [this.model.attributes.coverageLevel],
+                    backgroundColor: gradient
                 }
             ]
         },
@@ -115,6 +143,7 @@ const template2 = function (data) {
             title: {
                 display: true,
                 fontColor: '#000',
+                fontSize: 18,
                 text: 'Test Coverage Level'
             },
             legend: false,
@@ -123,7 +152,8 @@ const template2 = function (data) {
                     ticks: {
                         min: 0,
                         max: 7,
-                        stepSize: 1
+                        stepSize: 1,
+                        fontSize: 14
                     },
                     gridLines:{
                         display: false,
@@ -160,24 +190,27 @@ const template2 = function (data) {
     totalChartDiv.setAttribute("style", "width: 33.3%");
 
     var p1 = document.createElement("p");
-    p1.setAttribute("style", "position: absolute; top: 50%; left: 17%; transform: translate(-50%, -50%); text-align: center; font-size: 110%");
-    p1.appendChild(document.createTextNode("99.99%"));
+    p1.setAttribute("class", "graph-inner-text");
+    p1.setAttribute("id", "cov-graph-1");
+    p1.appendChild(document.createTextNode(formatPercentage(this.model.attributes.totalCoverage)));
 
     var inputChartDiv = document.createElement("div");
     inputChartDiv.setAttribute("class", "col");
     inputChartDiv.setAttribute("style", "width: 33.3%");
 
     var p2 = document.createElement("p");
-    p2.setAttribute("style", "position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; font-size: 110%");
-    p2.appendChild(document.createTextNode("99.99%"));
+    p2.setAttribute("class", "graph-inner-text");
+    p2.setAttribute("id", "cov-graph-2");
+    p2.appendChild(document.createTextNode(formatPercentage(this.model.attributes.inputCoverage)));
 
     var outputChartDiv = document.createElement("div");
     outputChartDiv.setAttribute("class", "col");
     outputChartDiv.setAttribute("style", "width: 33.3%");
 
     var p3 = document.createElement("p");
-    p3.setAttribute("style", "position: absolute; top: 50%; left: 83.5%; transform: translate(-50%, -50%); text-align: center; font-size: 110%");
-    p3.appendChild(document.createTextNode("99.99%"));
+    p3.setAttribute("class", "graph-inner-text");
+    p3.setAttribute("id", "cov-graph-3");
+    p3.appendChild(document.createTextNode(formatPercentage(this.model.attributes.outputCoverage)));
 
     var inputChartCanvas = document.createElement("canvas");
     var outputChartCanvas = document.createElement("canvas");
@@ -212,6 +245,7 @@ const template2 = function (data) {
             title: {
                 display: true,
                 fontColor: '#000',
+                fontSize: 16,
                 text: 'Total Coverage'
             },
             legend: false,
@@ -241,6 +275,7 @@ const template2 = function (data) {
             title: {
                 display: true,
                 fontColor: '#000',
+                fontSize: 16,
                 text: 'Input Coverage'
             },
             legend: false,
@@ -270,6 +305,7 @@ const template2 = function (data) {
             title: {
                 display: true,
                 fontColor: '#000',
+                fontSize: 16,
                 text: 'Output Coverage'
             },
             legend: false,

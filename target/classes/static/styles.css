@@ -1,0 +1,61 @@
+#cov-graph-1 {
+    left: 17%;
+}
+
+#cov-graph-2 {
+    left: 50%;
+}
+
+#cov-graph-3 {
+    left: 83.5%;
+}
+
+.graph-inner-text{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.5vw;
+}
+
+@media only screen and (max-width: 550px) {
+    .graph-inner-text {
+        top: 60%;
+    }
+}
+
+@media only screen and (min-width: 550px) and (max-width: 700px) {
+    .graph-inner-text {
+        top: 55%;
+    }
+}
+
+@media only screen and (min-width: 700px) and (max-width: 750px) {
+    .graph-inner-text {
+        top: 53%;
+    }
+}
+
+@media only screen and (min-width: 750px) and (max-width: 900px) {
+    .graph-inner-text {
+        top: 54%;
+    }
+}
+
+@media only screen and (min-width: 1300px){
+    .graph-inner-text {
+        top: 49%;
+    }
+}
+
+@media only screen and (min-width: 1500px){
+    .graph-inner-text {
+        top: 47%;
+    }
+}
+
+@media only screen and (min-width: 2200px){
+    .graph-inner-text {
+        top: 45%;
+    }
+}
