@@ -4,24 +4,144 @@ var MyTabModel = Backbone.Collection.extend({
     url: 'data/coverage.json'
 })
 
+var MyTabModel2 = Backbone.Collection.extend({
+    url: 'widgets/coverage.json'
+})
+
 class MyLayout extends allure.components.AppLayout {
 
     initialize() {
-        this.model = new MyTabModel();
+        this.model = new MyTabModel2();
     }
 
     loadData() {
-        //return this.model.fetch();
+        return this.model.fetch();
     }
 
     getContentView() {
-        return new MyView({items: this.model.attributes});
+        return new MyView({items: this.model.models});
     }
+}
+
+var dragSrcEl = null;
+
+function handleDragStart(e) {
+    this.style.opacity = '0.4';
+    
+    dragSrcEl = this;
+
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/html', this.innerHTML);
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+    e.preventDefault();
+    }
+
+    e.dataTransfer.dropEffect = 'move';
+    
+    return false;
+}
+
+function handleDragEnter(e) {
+    this.classList.add('over');
+}
+
+function handleDragLeave(e) {
+    this.classList.remove('over');
+}
+
+function handleDrop(e) {
+    if (e.stopPropagation) {
+        e.stopPropagation(); // stops the browser from redirecting.
+    }
+    
+    if (dragSrcEl != this) {
+        dragSrcEl.innerHTML = this.innerHTML;
+        this.innerHTML = e.dataTransfer.getData('text/html');
+        this.classList.remove('over');
+    }
+    
+    return false;
+}
+
+function handleDragEnd(e) {
+    this.style.opacity = '1';
 }
 
 const template = function (data) {
 
-    var html = '<h3 class="pane__title">Coverage</h3>';
+    var container = document.createElement("div");
+    container.setAttribute("class", "myContainer");
+
+    var divA = document.createElement("div");
+    divA.setAttribute("draggable", "true");
+    divA.setAttribute("class", "box");
+    divA.setAttribute("style", "height: 500px;");
+    divA.appendChild(document.createTextNode("A"));
+    divA.addEventListener('dragstart', handleDragStart, false);
+    divA.addEventListener('dragenter', handleDragEnter, false);
+    divA.addEventListener('dragover', handleDragOver, false);
+    divA.addEventListener('dragleave', handleDragLeave, false);
+    divA.addEventListener('drop', handleDrop, false);
+    divA.addEventListener('dragend', handleDragEnd, false);
+
+    var divB = document.createElement("div");
+    divB.setAttribute("draggable", "true");
+    divB.setAttribute("class", "box");
+    divB.setAttribute("style", "height: 500px;");
+    divB.appendChild(document.createTextNode("B"));
+    divB.addEventListener('dragstart', handleDragStart, false);
+    divB.addEventListener('dragenter', handleDragEnter, false);
+    divB.addEventListener('dragover', handleDragOver, false);
+    divB.addEventListener('dragleave', handleDragLeave, false);
+    divB.addEventListener('drop', handleDrop, false);
+    divB.addEventListener('dragend', handleDragEnd, false);
+
+    var divC = document.createElement("div");
+    divC.setAttribute("draggable", "true");
+    divC.setAttribute("class", "box");
+    divC.setAttribute("style", "height: 500px;");
+    divC.appendChild(document.createTextNode("C"));
+    divC.addEventListener('dragstart', handleDragStart, false);
+    divC.addEventListener('dragenter', handleDragEnter, false);
+    divC.addEventListener('dragover', handleDragOver, false);
+    divC.addEventListener('dragleave', handleDragLeave, false);
+    divC.addEventListener('drop', handleDrop, false);
+    divC.addEventListener('dragend', handleDragEnd, false);
+
+    var divD = document.createElement("div");
+    divD.setAttribute("draggable", "true");
+    divD.setAttribute("class", "box");
+    divD.setAttribute("style", "height: 500px;");
+    divD.appendChild(document.createTextNode("D"));
+    divD.addEventListener('dragstart', handleDragStart, false);
+    divD.addEventListener('dragenter', handleDragEnter, false);
+    divD.addEventListener('dragover', handleDragOver, false);
+    divD.addEventListener('dragleave', handleDragLeave, false);
+    divD.addEventListener('drop', handleDrop, false);
+    divD.addEventListener('dragend', handleDragEnd, false);
+
+    var divbr = document.createElement("div");
+    divbr.setAttribute("style", "height: 2px;");
+
+    container.appendChild(divA);
+    container.appendChild(divB);
+    container.appendChild(divC);
+    container.appendChild(divD);
+    container.appendChild(divbr);
+
+    var divs = document.getElementsByClassName("app__content");
+    var divToAdd = divs[0];
+    divToAdd.appendChild(container);
+
+    /*var divs2 = document.getElementsByClassName("app__nav");
+    var divToChange = divs2[0];
+    divToChange.setAttribute("style", "position: fixed;");*/
+    
+    var html = "";
+    
     return html;
 }
 
@@ -57,7 +177,7 @@ class MyWidget extends Backbone.Marionette.View {
 
 /////////////////////
 
-/*allure.api.addWidget('widgets', 'coverage', allure.components.WidgetStatusView.extend({
+/*allure.api.addWidget('coverage', 'coverage', allure.components.WidgetStatusView.extend({
     rowTag: 'a',
     title: 'coverage',
     baseUrl: 'coverage',
@@ -347,3 +467,67 @@ var MyView2 = Backbone.Marionette.View.extend({
 })
 
 allure.api.addWidget('widgets', 'coverage', MyView2);
+
+document.addEventListener('DOMContentLoaded', (event) => {
+
+    var dragSrcEl = null;
+
+    function handleDragStart(e) {
+        this.style.opacity = '0.4';
+        
+        dragSrcEl = this;
+
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', this.innerHTML);
+    }
+
+    function handleDragOver(e) {
+        if (e.preventDefault) {
+        e.preventDefault();
+        }
+
+        e.dataTransfer.dropEffect = 'move';
+        
+        return false;
+    }
+
+    function handleDragEnter(e) {
+        this.classList.add('over');
+    }
+
+    function handleDragLeave(e) {
+        this.classList.remove('over');
+    }
+
+    function handleDrop(e) {
+        if (e.stopPropagation) {
+            e.stopPropagation(); // stops the browser from redirecting.
+        }
+        
+        if (dragSrcEl != this) {
+            dragSrcEl.innerHTML = this.innerHTML;
+            this.innerHTML = e.dataTransfer.getData('text/html');
+        }
+        
+        return false;
+    }
+
+    function handleDragEnd(e) {
+        this.style.opacity = '1';
+        
+        items.forEach(function (item) {
+            item.classList.remove('over');
+        });
+    }
+    
+    
+    let items = document.querySelectorAll('.myContainer .box');
+    items.forEach(function(item) {
+        item.addEventListener('dragstart', handleDragStart, false);
+        item.addEventListener('dragenter', handleDragEnter, false);
+        item.addEventListener('dragover', handleDragOver, false);
+        item.addEventListener('dragleave', handleDragLeave, false);
+        item.addEventListener('drop', handleDrop, false);
+        item.addEventListener('dragend', handleDragEnd, false);
+    });
+});
