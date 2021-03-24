@@ -60,6 +60,8 @@
     }
 }
 
+/*///////////////////*/
+
 html{
     height: 100%;
 }
@@ -80,11 +82,11 @@ body{
     height: 100%;
 }
 
-.myContainer {
+  .myContainer {
     height: 100%;
     position: relative;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 50% 50%;/*repeat(2, 1fr);*/
     gap: 15px;
     margin: 15px;
     padding-bottom: 0px;
@@ -100,3 +102,17 @@ body{
   .box.over {
     border: 2px dotted #e5e5e5;
   }
+
+  /*///////////////////*/
+
+.table-coverage, .th-coverage, .td-coverage{
+    border: 1px solid #e5e5e5;
+}
+
+.th-coverage, .td-coverage{
+    padding: 10px;
+}
+
+.th-coverage, .tr-coverage{
+    text-align: left;
+}
