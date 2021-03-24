@@ -415,11 +415,12 @@ const template = function (data) {
 
     var pathDetailsTableHeader1 = document.createElement("th");
     pathDetailsTableHeader1.setAttribute("class", "th-coverage");
-    pathDetailsTableHeader1.setAttribute("style", "width:70%;");
+    pathDetailsTableHeader1.setAttribute("style", "width:90%;");
     pathDetailsTableHeader1.appendChild(document.createTextNode("Criterion"));
     
     var pathDetailsTableHeader2 = document.createElement("th");
     pathDetailsTableHeader2.setAttribute("class", "th-coverage");
+    pathDetailsTableHeader2.setAttribute("style", "text-align: center");
     pathDetailsTableHeader2.appendChild(document.createTextNode("Coverage"));
 
     pathDetailsTableHeaderRow.appendChild(pathDetailsTableHeader1);
@@ -428,21 +429,24 @@ const template = function (data) {
     pathDetailsTable.appendChild(pathDetailsTableHeaderRow);
 
     data.items[0].attributes.coverageOfCoverageCriteria.forEach(function(detail){
-        var tableRow = document.createElement("tr");
-        tableRow.setAttribute("class", "tr-coverage");
+        if(detail.coverageCriterion.startsWith("PATH")){
+            var tableRow = document.createElement("tr");
+            tableRow.setAttribute("class", "tr-coverage");
 
-        var criterion = document.createElement("td");
-        criterion.setAttribute("class", "td-coverage");
-        criterion.appendChild(document.createTextNode(detail.coverageCriterion));
+            var criterion = document.createElement("td");
+            criterion.setAttribute("class", "td-coverage");
+            criterion.appendChild(document.createTextNode(detail.coverageCriterion));
 
-        var cov = document.createElement("td");
-        cov.setAttribute("class", "td-coverage");
-        cov.appendChild(document.createTextNode(formatPercentage(detail.coverage)));
+            var cov = document.createElement("td");
+            cov.setAttribute("class", "td-coverage");
+            cov.setAttribute("style", "text-align: center");
+            cov.appendChild(document.createTextNode(formatPercentage(detail.coverage)));
 
-        tableRow.appendChild(criterion);
-        tableRow.appendChild(cov);
+            tableRow.appendChild(criterion);
+            tableRow.appendChild(cov);
 
-        pathDetailsTable.appendChild(tableRow);
+            pathDetailsTable.appendChild(tableRow);
+        }
     })
 
     pathDataRow2.appendChild(pathDetailsTable);
@@ -463,13 +467,13 @@ const template = function (data) {
     pathWidgetDiv.addEventListener('dragleave', handleDragLeave, false);
     pathWidgetDiv.addEventListener('drop', handleDrop, false);
     pathWidgetDiv.addEventListener('dragend', handleDragEnd, false);
-
+    
     ////////////////////////////////////////////////////////////////////////////////////
 
     var divB = document.createElement("div");
     divB.setAttribute("draggable", "true");
     divB.setAttribute("class", "box");
-    divB.setAttribute("style", "height: 500px;");
+    //divB.setAttribute("style", "height: 500px;");
     divB.appendChild(document.createTextNode("B"));
     divB.addEventListener('dragstart', handleDragStart, false);
     divB.addEventListener('dragenter', handleDragEnter, false);
@@ -529,8 +533,427 @@ const template = function (data) {
     return html;
 }
 
+function getSummaryDiv(info){
+
+    var div = document.createElement("div");
+    div.setAttribute("draggable", "true");
+    div.setAttribute("class", "box");
+
+    /////////////////////
+
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "row");
+    
+    var titleCoverage = document.createElement("h2");
+    titleCoverage.setAttribute("class", "widget__title");
+    titleCoverage.appendChild(document.createTextNode("summary"));
+
+    /////////////////////
+    
+    var dataDiv = document.createElement("div");
+    dataDiv.setAttribute("class", "row");
+    dataDiv.setAttribute("style", "display: flex");
+
+    /////////////////////
+
+    var dataRow1 = document.createElement("div");
+    dataRow1.setAttribute("class", "row");
+    dataRow1.setAttribute("style", "margin-bottom: 5%");
+
+    var levelChartDiv = document.createElement("div");
+    levelChartDiv.setAttribute("class", "col");
+
+    var levelChartCanvas = document.createElement("canvas");
+
+    levelChartDiv.appendChild(levelChartCanvas);
+
+    var levelctx = levelChartCanvas.getContext("2d");
+
+    var gradient = levelctx.createLinearGradient(0, 0, 600, 0);
+    gradient.addColorStop(0, '#fd5a3e');
+    gradient.addColorStop(0.5, '#ffd050');
+    gradient.addColorStop(1, '#97cc64');
+
+    var levelChart = new Chart(levelctx, {
+        type: 'horizontalBar',
+        data: {
+            labels:[ "Test Coverage Level"],
+            datasets: [
+                {
+                    data: [info.items[0].attributes.coverageLevel],
+                    backgroundColor: gradient
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontColor: '#000',
+                fontSize: 18,
+                text: 'Test Coverage Level'
+            },
+            legend: false,
+            scales:{
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 7,
+                        stepSize: 1,
+                        fontSize: 14
+                    },
+                    gridLines:{
+                        display: false,
+                        zeroLineWidth: 0.5
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        display: false
+                    },
+                    gridLines:{
+                        display: true,
+                        zeroLineWidth: 1,
+                        zeroLineColor: '#e5e5e5'
+                    },
+                    barPercentage: 0.75,
+                    categoryPercentage: 1
+                }]
+            },
+            aspectRatio:6
+        }
+    })
+
+    dataRow1.appendChild(levelChartDiv);
+
+    /////////////////////
+
+    var dataRow2 = document.createElement("div");
+    dataRow2.setAttribute("class", "row");
+    dataRow2.setAttribute("style", "margin-bottom: 5%; display: flex; position: relative;");
+
+    var totalChartDiv = document.createElement("div");
+    totalChartDiv.setAttribute("class", "col");
+    totalChartDiv.setAttribute("style", "width: 33.3%");
+
+    var p1 = document.createElement("p");
+    p1.setAttribute("class", "graph-inner-text");
+    p1.setAttribute("id", "cov-graph-1");
+    p1.appendChild(document.createTextNode(formatPercentage(info.items[0].attributes.totalCoverage)));
+
+    var inputChartDiv = document.createElement("div");
+    inputChartDiv.setAttribute("class", "col");
+    inputChartDiv.setAttribute("style", "width: 33.3%");
+
+    var p2 = document.createElement("p");
+    p2.setAttribute("class", "graph-inner-text");
+    p2.setAttribute("id", "cov-graph-2");
+    p2.appendChild(document.createTextNode(formatPercentage(info.items[0].attributes.inputCoverage)));
+
+    var outputChartDiv = document.createElement("div");
+    outputChartDiv.setAttribute("class", "col");
+    outputChartDiv.setAttribute("style", "width: 33.3%");
+
+    var p3 = document.createElement("p");
+    p3.setAttribute("class", "graph-inner-text");
+    p3.setAttribute("id", "cov-graph-3");
+    p3.appendChild(document.createTextNode(formatPercentage(info.items[0].attributes.outputCoverage)));
+
+    var inputChartCanvas = document.createElement("canvas");
+    var outputChartCanvas = document.createElement("canvas");
+    var totalChartCanvas = document.createElement("canvas");
+
+    inputChartDiv.appendChild(inputChartCanvas);
+    outputChartDiv.appendChild(outputChartCanvas);
+    totalChartDiv.appendChild(totalChartCanvas);
+
+    var totalctx = totalChartCanvas.getContext("2d");
+    var inputctx = inputChartCanvas.getContext("2d");
+    var outputctx = outputChartCanvas.getContext("2d");
+
+    var totalChart = new Chart(totalctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+            'Covered',
+            'Not covered'
+            ],
+            datasets: [
+                {
+                    data: [info.items[0].attributes.totalCoverage.toFixed(2), (100-info.items[0].attributes.totalCoverage).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontColor: '#000',
+                fontSize: 16,
+                text: 'Total Coverage'
+            },
+            legend: false,
+            cutoutPercentage: 70,
+            aspectRatio: 1
+        }
+    })
+
+    var inputChart = new Chart(inputctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+            'Covered',
+            'Not covered'
+            ],
+            datasets: [
+                {
+                    data: [info.items[0].attributes.inputCoverage.toFixed(2), (100-info.items[0].attributes.inputCoverage).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontColor: '#000',
+                fontSize: 16,
+                text: 'Input Coverage'
+            },
+            legend: false,
+            cutoutPercentage: 70,
+            aspectRatio: 1
+        }
+    })
+
+    var outputChart = new Chart(outputctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+            'Covered',
+            'Not covered'
+            ],
+            datasets: [
+                {
+                    data: [info.items[0].attributes.outputCoverage.toFixed(2), (100-info.items[0].attributes.outputCoverage).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontColor: '#000',
+                fontSize: 16,
+                text: 'Output Coverage'
+            },
+            legend: false,
+            cutoutPercentage: 70,
+            aspectRatio: 1
+        }
+    })
+
+    dataRow2.appendChild(totalChartDiv);
+    dataRow2.appendChild(inputChartDiv);
+    dataRow2.appendChild(outputChartDiv);
+    dataRow2.appendChild(p1);
+    dataRow2.appendChild(p2);
+    dataRow2.appendChild(p3);
+
+    /////////////////////
+    
+    titleDiv.appendChild(titleCoverage);
+
+    div.appendChild(titleDiv);
+
+    div.appendChild(dataRow1);
+    div.appendChild(dataRow2);
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
+
+    return div;
+}
+
+function createWidgetPlusTableDiv(info, type, name, widgetTitle){
+    var div = document.createElement("div");
+    div.setAttribute("draggable", "true");
+    div.setAttribute("class", "box");
+
+    /////////////////////
+
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "row");
+
+    var title = document.createElement("h2");
+    title.setAttribute("class", "widget__title");
+    title.appendChild(document.createTextNode(widgetTitle));
+
+    /////////////////////
+
+    var dataDiv = document.createElement("div");
+    dataDiv.setAttribute("class", "row");
+
+    /////////////////////
+
+    var dataRow1 = document.createElement("div");
+    dataRow1.setAttribute("class", "row");
+    dataRow1.setAttribute("style", "margin-bottom: 5%;");
+
+    var chartDiv = document.createElement("div");
+    chartDiv.setAttribute("class", "col");
+
+    var canvas = document.createElement("canvas");
+
+    chartDiv.appendChild(canvas);
+
+    var ctx = canvas.getContext("2d");
+
+    var chart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: [
+            'Covered',
+            'Not covered'
+            ],
+            datasets: [
+                {
+                    data: [info.items[0].attributes[name].toFixed(2), (100-info.items[0].attributes[name]).toFixed(2)],
+                    backgroundColor: [
+                        'rgb(151, 204, 100)',
+                        'rgb(253, 90, 62)'
+                    ]
+                }
+            ]
+        },
+        options: {
+            title: {
+                display: true,
+                fontColor: '#000',
+                fontSize: 16,
+                //text: widgetTitle
+            },
+            legend: false,
+            cutoutPercentage: 70,
+            aspectRatio: 3,
+            animation: {
+                duration: 2000,
+            }
+        }
+    })
+
+    dataRow1.appendChild(chartDiv);
+
+    /////////////////////
+
+    var dataRow2 = document.createElement("div");
+    dataRow2.setAttribute("class", "row");
+
+    var detailsTable = document.createElement("table");
+    detailsTable.setAttribute("class", "table-coverage");
+
+    var tableHeaderRow = document.createElement("tr");
+
+    var tableHeader1 = document.createElement("th");
+    tableHeader1.setAttribute("class", "th-coverage");
+    tableHeader1.setAttribute("style", "width:90%;");
+    tableHeader1.appendChild(document.createTextNode("Criterion"));
+
+    var tableHeader2 = document.createElement("th");
+    tableHeader2.setAttribute("class", "th-coverage");
+    tableHeader2.setAttribute("style", "text-align: center;");
+    tableHeader2.appendChild(document.createTextNode("Coverage"));
+
+    tableHeaderRow.appendChild(tableHeader1);
+    tableHeaderRow.appendChild(tableHeader2);
+
+    detailsTable.appendChild(tableHeaderRow);
+
+    info.items[0].attributes.coverageOfCoverageCriteria.forEach(function(detail){
+        if(detail.coverageCriterion.startsWith(type)){
+            var tableRow = document.createElement("tr");
+            tableRow.setAttribute("class", "tr-coverage");
+
+            var criterion = document.createElement("td");
+            criterion.setAttribute("class", "td-coverage");
+            criterion.appendChild(document.createTextNode(detail.coverageCriterion));
+
+            var cov = document.createElement("td");
+            cov.setAttribute("class", "td-coverage");
+            cov.setAttribute("style", "text-align: center");
+            cov.appendChild(document.createTextNode(formatPercentage(detail.coverage)));
+
+            tableRow.appendChild(criterion);
+            tableRow.appendChild(cov);
+
+            detailsTable.appendChild(tableRow);
+        }
+    })
+
+    dataRow2.appendChild(detailsTable);
+
+    titleDiv.appendChild(title);
+    dataDiv.appendChild(dataRow1);
+    dataDiv.appendChild(dataRow2);
+
+    div.appendChild(titleDiv);
+    div.appendChild(dataDiv);
+
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
+
+    return div;
+}
+
+const template3 = function (data) {
+    
+    var container = document.createElement("div");
+    container.setAttribute("class", "myContainer");
+
+    var summaryDiv = getSummaryDiv(data);
+    var pathDiv = createWidgetPlusTableDiv(data, "PATH", "pathCoverage", "Path Coverage");
+    var operationDiv = createWidgetPlusTableDiv(data, "OPERATION", "operationCoverage", "Operation Coverage");
+    var parameterDiv = createWidgetPlusTableDiv(data, "PARAMETER", "parameterCoverage", "Parameter Coverage");
+    var parameterValueDiv = createWidgetPlusTableDiv(data, "PARAMETER_VALUE", "parameterValueCoverage", "Parameter Value Coverage");
+    var statusCodeDiv = createWidgetPlusTableDiv(data, "STATUS_CODE", "statusCodeCoverage", "Status Code Coverage");
+    var statusCodeClassDiv = createWidgetPlusTableDiv(data, "STATUS_CODE_CLASS", "statusCodeClassCoverage", "Status Code Class Coverage");
+
+    var divbr = document.createElement("div");
+    divbr.setAttribute("style", "height: 2px;");
+
+    container.appendChild(summaryDiv);
+    container.appendChild(pathDiv);
+    container.appendChild(operationDiv);
+    container.appendChild(parameterDiv);
+    container.appendChild(parameterValueDiv);
+    container.appendChild(statusCodeDiv);
+    container.appendChild(statusCodeClassDiv);
+    container.appendChild(divbr);
+
+    var divs = document.getElementsByClassName("app__content");
+    var divToAdd = divs[0];
+    divToAdd.appendChild(container);
+
+    var html = "";
+    return html;
+}
+
 var MyView = Backbone.Marionette.View.extend({
-    template: template,
+    template: template3,
 
     render: function () {
         this.$el.html(this.template(this.options));
