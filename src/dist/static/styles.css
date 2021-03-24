@@ -85,19 +85,18 @@ body{
     position: relative;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin: 12px;
+    gap: 15px;
+    margin: 15px;
     padding-bottom: 0px;
   }
   
   .box {
-    border: 3px solid #666;
-    background-color: #ddd;
-    border-radius: .5em;
-    padding: 10px;
+    border: 1px solid #e5e5e5;
+    background-color: #fff;
+    padding: 15px;
     cursor: move;
   }
 
   .box.over {
-    border: 3px dotted #666;
+    border: 2px dotted #e5e5e5;
   }
