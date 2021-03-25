@@ -785,6 +785,113 @@ function getSummaryDiv(info){
     return div;
 }
 
+function getFullSummary(data){
+    var div = document.createElement("div");
+    div.setAttribute("draggable", "true");
+    div.setAttribute("class", "box");
+
+    /////////////////////
+
+    var titleDiv = document.createElement("div");
+    titleDiv.setAttribute("class", "row");
+
+    var title = document.createElement("h2");
+    title.setAttribute("class", "widget__title");
+    title.appendChild(document.createTextNode("Full Summary"));
+
+    /////////////////////
+
+    var dataDiv = document.createElement("div");
+    dataDiv.setAttribute("class", "row");
+
+    /////////////////////
+
+    var dataRow1 = document.createElement("div");
+    dataRow1.setAttribute("class", "row");
+    dataRow1.setAttribute("style", "margin-bottom: 5%;");
+
+    var chartDiv = document.createElement("div");
+    chartDiv.setAttribute("class", "col");
+
+    var canvas = document.createElement("canvas");
+
+    chartDiv.appendChild(canvas);
+
+    var ctx = canvas.getContext("2d");
+
+    var gradient = ctx.createLinearGradient(0, 300, 0, 0);
+    gradient.addColorStop(0, '#fd5a3e');
+    gradient.addColorStop(1, '#97cc64');
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            datasets: [{
+                data: [data.items[0].attributes.totalCoverage.toFixed(2),
+                    data.items[0].attributes.inputCoverage.toFixed(2),
+                    data.items[0].attributes.outputCoverage.toFixed(2),
+                    data.items[0].attributes.pathCoverage.toFixed(2),
+                    data.items[0].attributes.operationCoverage.toFixed(2),
+                    data.items[0].attributes.inputContentTypeCoverage.toFixed(2),
+                    data.items[0].attributes.outputContentTypeCoverage.toFixed(2),
+                    data.items[0].attributes.parameterCoverage.toFixed(2),
+                    data.items[0].attributes.statusCodeClassCoverage.toFixed(2),
+                    data.items[0].attributes.parameterValueCoverage.toFixed(2),
+                    data.items[0].attributes.statusCodeCoverage.toFixed(2),
+                    data.items[0].attributes.responseBodyPropertiesCoverage.toFixed(2)
+                ],
+                backgroundColor: gradient,
+                borderWidth: 1,
+                borderColor: "#46827d"
+            }],
+            labels: [
+                'Total Coverage',
+                'Input Coverage',
+                'Output Coverage',
+                'Path Coverage',
+                'Operation Coverage',
+                'Input Content Type Coverage',
+                'Output Content Type Coverage',
+                'Parameter Coverage',
+                'Status Code Class Coverage',
+                'Parameter Value Coverage',
+                'Status Code Coverage',
+                'Response Body Properties Coverage'
+            ]
+        },
+        options: {
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        max: 100
+                    }
+                }]
+            }
+        }
+    })
+
+    dataRow1.appendChild(chartDiv);
+
+    titleDiv.appendChild(title);
+    dataDiv.appendChild(dataRow1);
+
+    div.appendChild(titleDiv);
+    div.appendChild(dataDiv);
+
+    div.addEventListener('dragstart', handleDragStart, false);
+    div.addEventListener('dragenter', handleDragEnter, false);
+    div.addEventListener('dragover', handleDragOver, false);
+    div.addEventListener('dragleave', handleDragLeave, false);
+    div.addEventListener('drop', handleDrop, false);
+    div.addEventListener('dragend', handleDragEnd, false);
+
+    return div;
+}
+
 function createWidgetPlusTableDiv(info, type, name, widgetTitle){
     var div = document.createElement("div");
     div.setAttribute("draggable", "true");
@@ -925,6 +1032,7 @@ const template3 = function (data) {
     container.setAttribute("class", "myContainer");
 
     var summaryDiv = getSummaryDiv(data);
+    var fullSummaryDiv = getFullSummary(data);
     var pathDiv = createWidgetPlusTableDiv(data, "PATH", "pathCoverage", "Path Coverage");
     var operationDiv = createWidgetPlusTableDiv(data, "OPERATION", "operationCoverage", "Operation Coverage");
     var parameterDiv = createWidgetPlusTableDiv(data, "PARAMETER", "parameterCoverage", "Parameter Coverage");
@@ -936,6 +1044,7 @@ const template3 = function (data) {
     divbr.setAttribute("style", "height: 2px;");
 
     container.appendChild(summaryDiv);
+    container.appendChild(fullSummaryDiv)
     container.appendChild(pathDiv);
     container.appendChild(operationDiv);
     container.appendChild(parameterDiv);
