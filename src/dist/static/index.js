@@ -756,7 +756,12 @@ function getSummaryDiv(info){
             },
             legend: false,
             cutoutPercentage: 70,
-            aspectRatio: 1
+            aspectRatio: 1,
+            responsive: true,
+            maintainAspectRatio: true,
+            animation: {
+                duration: 2000
+            }
         }
     })
 
@@ -812,6 +817,7 @@ function getFullSummary(data){
 
     var chartDiv = document.createElement("div");
     chartDiv.setAttribute("class", "col");
+    chartDiv.setAttribute("style", "margin-top:5%");
 
     var canvas = document.createElement("canvas");
 
@@ -915,12 +921,16 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle){
 
     var dataRow1 = document.createElement("div");
     dataRow1.setAttribute("class", "row");
-    dataRow1.setAttribute("style", "margin-bottom: 5%;");
+
+    var p = document.createElement("p");
+    p.setAttribute("class", "chart-inner-text");
+    p.appendChild(document.createTextNode(formatPercentage(info.items[0].attributes[name])));
 
     var chartDiv = document.createElement("div");
     chartDiv.setAttribute("class", "col");
 
     var canvas = document.createElement("canvas");
+    canvas.setAttribute("style", "margin: auto;");
 
     chartDiv.appendChild(canvas);
 
@@ -944,6 +954,7 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle){
             ]
         },
         options: {
+            responsive: false,
             title: {
                 display: true,
                 fontColor: '#000',
@@ -952,14 +963,15 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle){
             },
             legend: false,
             cutoutPercentage: 70,
-            aspectRatio: 3,
+            aspectRatio: 1.5,
             animation: {
-                duration: 2000,
-            }
+                duration: 1000
+            },
         }
     })
 
     dataRow1.appendChild(chartDiv);
+    dataRow1.appendChild(p);
 
     /////////////////////
 
@@ -1028,8 +1040,21 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle){
 
 const template3 = function (data) {
     
+    //var container = document.createElement("div");
+    //container.setAttribute("class", "myContainer");
+
     var container = document.createElement("div");
-    container.setAttribute("class", "myContainer");
+    container.setAttribute("class", "row");
+    container.setAttribute("style", "display:flex");
+    
+    var column1 = document.createElement("div");
+    column1.setAttribute("class", "col");
+    column1.setAttribute("style", "width:50%; padding-left: 15px; padding-top: 15px; padding-right:7px");
+
+    var column2 = document.createElement("div");
+    column2.setAttribute("class", "col");
+    column2.setAttribute("style", "width:50%; padding-left: 8px; padding-top: 15px; padding-right:15px");
+
 
     var summaryDiv = getSummaryDiv(data);
     var fullSummaryDiv = getFullSummary(data);
@@ -1043,15 +1068,18 @@ const template3 = function (data) {
     var divbr = document.createElement("div");
     divbr.setAttribute("style", "height: 2px;");
 
-    container.appendChild(summaryDiv);
-    container.appendChild(fullSummaryDiv)
-    container.appendChild(pathDiv);
-    container.appendChild(operationDiv);
-    container.appendChild(parameterDiv);
-    container.appendChild(parameterValueDiv);
-    container.appendChild(statusCodeDiv);
-    container.appendChild(statusCodeClassDiv);
-    container.appendChild(divbr);
+    column1.appendChild(summaryDiv);
+    column2.appendChild(fullSummaryDiv)
+    column1.appendChild(pathDiv);
+    column2.appendChild(operationDiv);
+    column1.appendChild(parameterDiv);
+    column2.appendChild(parameterValueDiv);
+    column1.appendChild(statusCodeDiv);
+    column2.appendChild(statusCodeClassDiv);
+    column1.appendChild(divbr);
+
+    container.appendChild(column1);
+    container.appendChild(column2);
 
     var divs = document.getElementsByClassName("app__content");
     var divToAdd = divs[0];
