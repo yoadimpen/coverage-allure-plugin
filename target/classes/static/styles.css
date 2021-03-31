@@ -1,3 +1,246 @@
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+}
+
+#content{
+    height: 100%;
+}
+
+.app{
+    height: 100%;
+}
+
+.app__content {
+    height: 100%;
+}
+  
+.content {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: calc(0.5* (100vw - 242px)) calc(0.5* (100vw - 242px));
+    grid-template-rows: auto auto auto auto;
+    padding: 15px;
+    padding-right: 20px;
+    overflow-x: hidden;
+}
+  
+/*EACH WIDGET*/
+  
+.grid-item {
+    border: 1px solid #e5e5e5;
+}
+  
+h2 {
+    font-size: 20px;
+    margin: 15px;
+    font-weight: lighter;
+}
+  
+.data-section {
+    margin: 15px;
+}
+  
+th {
+    padding: 10px;
+    width: 100%;
+}
+  
+td {
+    padding: 10px;
+    width: 100%;
+    border-top: 1px solid #e5e5e5;
+}
+  
+#table-data {
+    display: block;
+    width: 100%;
+    height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+  
+#summary-charts{
+    display: flex;
+}
+  
+#summary-chart{
+    width: 33.33%;
+}
+  
+#widget-chart{
+    border-bottom: 1px solid #e5e5e5;
+}
+  
+#level-text{
+    display: none;
+}
+
+.grid-item.over{
+    border: 2px dotted #e5e5e5;
+}
+  
+/*RESPONSIVE*/
+  
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .content {
+        grid-template-columns: calc(100vw - 230px);
+    }
+    #table-data{
+        height: 125px;
+        font-size: small;
+    }
+    #table-header{
+        font-size: small;
+    }
+    #text-summary {
+        display: none;
+    }
+    #text-chart {
+        display: none;
+    }
+    #widget-chart{
+        padding-bottom: 10px;
+    }
+    #summary-charts{
+        display: inline;
+    }
+    #summary-chart{
+        width: 50%;
+        margin: auto;
+    }
+    #level-text{
+        display: block;
+        text-align: center;
+        margin: auto;
+    }
+    #level-part-widget{
+        display: none;
+    }
+}
+  
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .content {
+        grid-template-columns: calc(100vw - 230px);
+    }
+    #table-data{
+        height: 125px;
+        font-size: small;
+    }
+    #table-header{
+        font-size: small;
+    }
+    #text-summary {
+        transform: translate(0%, -380%);
+        text-align: center;
+        font-size: 2.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -410%);
+        text-align: center;
+        font-size: 2.5vw;
+    }
+}
+  
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .content {
+        grid-template-columns: calc(100vw - 230px);
+    }
+    #table-data{
+        height: 125px;
+        font-size: medium;
+    }
+    #table-header{
+        font-size: medium;
+    }
+    #text-summary {
+        transform: translate(0%, -400%);
+        text-align: center;
+        font-size: 3vw;
+    }
+    #text-chart {
+        transform: translate(0%, -420%);
+        text-align: center;
+        font-size: 3vw;
+    }
+}
+  
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 1000px) {
+    .content{
+        grid-template-columns: calc(0.5* (100vw - 242px)) calc(0.5* (100vw - 242px));
+    }
+    #table-data{
+        height: 125px;
+        font-size: medium;
+    }
+    #table-header{
+        font-size: medium;
+    }
+    #text-summary {
+        transform: translate(0%, -360%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -380%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+}
+  
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .content{
+        grid-template-columns: calc(0.5* (100vw - 242px)) calc(0.5* (100vw - 242px));
+    }
+    #table-data{
+        height: 150px;
+        font-size: medium;
+    }
+    #table-header{
+        font-size: medium;
+    }
+    #text-summary {
+        transform: translate(0%, -430%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -440%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+}
+  
+/*TEXT MEDIA QUERIES*/
+  
+@media only screen and (min-width: 1450px) {
+    #text-summary {
+        transform: translate(0%, -450%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -460%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+}
+
 #cov-graph-1 {
     left: 17%;
 }
@@ -58,75 +301,4 @@
     .graph-inner-text {
         top: 45%;
     }
-}
-
-/*///////////////////*/
-
-html{
-    height: 100%;
-}
-
-body{
-    height: 100%;
-}
-
-#content{
-    height: 100%;
-}
-
-.app{
-    height: 100%;
-}
-
-.app__content {
-    height: 100%;
-}
-
-  .myContainer {
-    height: 100%;
-    position: relative;
-    display: grid;
-    grid-template-columns: 50% 50%;/*repeat(2, 1fr);*/
-    gap: 15px;
-    margin: 15px;
-    margin-right: 30px;
-    padding-bottom: 0px;
-  }
-  
-  .box {
-    border: 1px solid #e5e5e5;
-    background-color: #fff;
-    padding: 15px;
-    margin-bottom: 15px;
-  }
-
-  .box.over {
-    border: 2px dotted #e5e5e5;
-  }
-
-  /*///////////////////*/
-
-  .table-coverage{
-      width: 100%;
-  }
-
-.table-coverage, .th-coverage, .td-coverage{
-    border: 1px solid #e5e5e5;
-}
-
-.th-coverage, .td-coverage{
-    padding: 10px;
-}
-
-.th-coverage, .tr-coverage{
-    text-align: left;
-}
-
-.chart-inner-text{
-    position: relative;
-    top: auto;
-    left: 50%;
-    transform: translate(-50%, -450%);
-    text-align: center;
-    font-size: 1.5vw;
 }
