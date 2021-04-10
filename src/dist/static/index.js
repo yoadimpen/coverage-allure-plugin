@@ -170,7 +170,9 @@ function getSummaryDiv(info){
             datasets: [
                 {
                     data: [info.items[0].attributes.coverageLevel],
-                    backgroundColor: "#343434"
+                    backgroundColor: 'rgba(151, 204, 100, 0.5)',
+                    borderWidth: 1.5,
+                    borderColor: 'rgba(151, 204, 100, 1)'
                 }
             ]
         },
@@ -361,9 +363,9 @@ function getFullSummary(data){
                     data.items[0].attributes.statusCodeCoverage.toFixed(2),
                     data.items[0].attributes.responseBodyPropertiesCoverage.toFixed(2)
                 ],
-                backgroundColor: "#343434",
-                borderWidth: 1,
-                borderColor: "#e5e5e5"
+                backgroundColor: 'rgba(151, 204, 100, 0.5)',
+                borderWidth: 1.5,
+                borderColor: 'rgba(151, 204, 100, 1)'
             }],
             labels: [
                 'Total Coverage',
@@ -438,7 +440,7 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle, widgetH2, widge
     var trHeader = document.createElement("tr");
     var th1 = document.createElement("th");
     th1.setAttribute("style", "width: 85%; text-align: left;");
-    th1.appendChild(document.createTextNode("CRITERION"));
+    th1.appendChild(document.createTextNode("ELEMENT"));
     var th2 = document.createElement("th");
     th2.setAttribute("style", "width: 15%;");
     th2.appendChild(document.createTextNode("COVERAGE"));
@@ -456,9 +458,13 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle, widgetH2, widge
             var row = document.createElement("tr");
 
             var criterion = document.createElement("td");
-            criterion.appendChild(document.createTextNode(detail.coverageCriterion));
+            var content = detail.coverageCriterion;
+            content = content.replace(type, "");
+            if(content == "") {content = "-";}
+            criterion.appendChild(document.createTextNode(content));
 
             var cov = document.createElement("td");
+            cov.setAttribute("style", "text-align: right;");
             cov.appendChild(document.createTextNode(formatPercentage(detail.coverage)));
 
             row.appendChild(criterion);
@@ -519,6 +525,16 @@ function createWidgetPlusTableDiv(info, type, name, widgetTitle, widgetH2, widge
     return div;
 }
 
+function existsInJSON(info, filter) {
+    var res = false;
+
+    info.items[0].attributes.coverageOfCoverageCriteria.forEach(function(detail){
+        res = res || detail.coverageCriterion.startsWith(filter);
+    })
+
+    return res;
+}
+
 const templateTab = function (data) {
     
     var content = document.createElement("div");
@@ -526,21 +542,27 @@ const templateTab = function (data) {
 
     var summaryDiv = getSummaryDiv(data);
     var fullSummaryDiv = getFullSummary(data);
-    var pathDiv = createWidgetPlusTableDiv(data, "PATH", "pathCoverage", "Path Coverage", "PATH COVERAGE", "path-widget", "path-chart");
-    var operationDiv = createWidgetPlusTableDiv(data, "OPERATION", "operationCoverage", "Operation Coverage", "OPERATION COVERAGE", "operation-widget", "operation-chart");
-    var parameterDiv = createWidgetPlusTableDiv(data, "PARAMETER", "parameterCoverage", "Parameter Coverage", "PARAMETER COVERAGE", "parameter-widget", "parameter-chart");
-    var parameterValueDiv = createWidgetPlusTableDiv(data, "PARAMETER_VALUE", "parameterValueCoverage", "Parameter Value Coverage", "PARAMETER VALUE COVERAGE", "parameter-value-widget", "parameter-value-chart");
-    var statusCodeDiv = createWidgetPlusTableDiv(data, "STATUS_CODE", "statusCodeCoverage", "Status Code Coverage", "STATUS CODE COVERAGE", "status-code-widget", "status-code-chart");
-    var statusCodeClassDiv = createWidgetPlusTableDiv(data, "STATUS_CODE_CLASS", "statusCodeClassCoverage", "Status Code Class Coverage", "STATUS CODE CLASS COVERAGE", "status-code-class-widget", "status-code-class-chart");
+    var pathDiv = existsInJSON(data, "PATH/") ? createWidgetPlusTableDiv(data, "PATH/", "pathCoverage", "Path Coverage", "PATH COVERAGE", "path-widget", "path-chart") : "non-included";
+    var operationDiv = existsInJSON(data, "OPERATION/") ? createWidgetPlusTableDiv(data, "OPERATION/", "operationCoverage", "Operation Coverage", "OPERATION COVERAGE", "operation-widget", "operation-chart") : "non-included";
+    var inputContentTypeDiv = existsInJSON(data, "INPUT_CONTENT_TYPE/") ? createWidgetPlusTableDiv(data, "INPUT_CONTENT_TYPE/", "inputContentTypeCoverage", "Input Content Type Coverage", "INPUT CONTENT TYPE COVERAGE", "input-content-type-widget") : "non-included";
+    var outputContentTypeDiv = existsInJSON(data, "OUTPUT_CONTENT_TYPE/") ? createWidgetPlusTableDiv(data, "OUTPUT_CONTENT_TYPE/", "outputContentTypeCoverage", "Output Content Type Coverage", "OUTPUT CONTENT TYPE COVERAGE", "output-content-type-widget") : "non-included";
+    var parameterDiv = existsInJSON(data, "PARAMETER/") ? createWidgetPlusTableDiv(data, "PARAMETER/", "parameterCoverage", "Parameter Coverage", "PARAMETER COVERAGE", "parameter-widget", "parameter-chart") : "non-included";
+    var parameterValueDiv = existsInJSON(data, "PARAMETER_VALUE/") ? createWidgetPlusTableDiv(data, "PARAMETER_VALUE/", "parameterValueCoverage", "Parameter Value Coverage", "PARAMETER VALUE COVERAGE", "parameter-value-widget", "parameter-value-chart") : "non-included";
+    var statusCodeDiv = existsInJSON(data, "STATUS_CODE/") ? createWidgetPlusTableDiv(data, "STATUS_CODE/", "statusCodeCoverage", "Status Code Coverage", "STATUS CODE COVERAGE", "status-code-widget", "status-code-chart") : "non-included";
+    var statusCodeClassDiv = existsInJSON(data, "STATUS_CODE_CLASS/") ? createWidgetPlusTableDiv(data, "STATUS_CODE_CLASS/", "statusCodeClassCoverage", "Status Code Class Coverage", "STATUS CODE CLASS COVERAGE", "status-code-class-widget", "status-code-class-chart") : "non-included";
+    var responseBodyPropertiesDiv = existsInJSON(data, "RESPONSE_BODY_PROPERTIES/") ? createWidgetPlusTableDiv(data, "RESPONSE_BODY_PROPERTIES/", "responseBodyPropertiesCoverage", "Response Body Properties Coverage", "RESPONSE BODY PROPERTIES COVERAGE", "response-body-properties-widget") : "non-included";
 
     content.appendChild(summaryDiv);
     content.appendChild(fullSummaryDiv)
-    content.appendChild(pathDiv);
-    content.appendChild(operationDiv);
-    content.appendChild(parameterDiv);
-    content.appendChild(parameterValueDiv);
-    content.appendChild(statusCodeDiv);
-    content.appendChild(statusCodeClassDiv);
+    if (pathDiv != "non-included") {content.appendChild(pathDiv);}
+    if (inputContentTypeDiv != "non-included") {content.appendChild(inputContentTypeDiv);}
+    if (outputContentTypeDiv != "non-included") {content.appendChild(outputContentTypeDiv);}
+    if (operationDiv != "non-included") {content.appendChild(operationDiv);}
+    if (parameterDiv != "non-included") {content.appendChild(parameterDiv);}
+    if (parameterValueDiv != "non-included") {content.appendChild(parameterValueDiv);}
+    if (statusCodeDiv != "non-included") {content.appendChild(statusCodeDiv);}
+    if (statusCodeClassDiv != "non-included") {content.appendChild(statusCodeClassDiv);}
+    if (responseBodyPropertiesDiv != "non-included") {content.appendChild(responseBodyPropertiesDiv);}
 
     var divs = document.getElementsByClassName("app__content");
     var divToAdd = divs[0];
@@ -662,7 +684,9 @@ const templateWidget = function (data) {
             datasets: [
                 {
                     data: [this.model.attributes.coverageLevel],
-                    backgroundColor: "#343434"
+                    backgroundColor: 'rgba(151, 204, 100, 0.5)',
+                    borderWidth: 1.5,
+                    borderColor: 'rgba(151, 204, 100, 1)'
                 }
             ]
         },
