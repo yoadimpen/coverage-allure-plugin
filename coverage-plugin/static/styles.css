@@ -1,0 +1,332 @@
+html, body{
+    width: 100%;
+    height: 100%;
+    margin: 0%;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+html{
+    height: 100%;
+}
+
+body{
+    height: 100%;
+}
+
+#content{
+    height: 100%;
+}
+
+.app{
+    height: 100%;
+}
+
+.app__content {
+    height: 100%;
+}
+  
+.content {
+    display: grid;
+    grid-gap: 15px;
+    grid-template-columns: calc(0.5* (100vw - 242px)) calc(0.5* (100vw - 242px));
+    grid-template-rows: auto auto auto auto;
+    padding: 15px;
+    padding-right: 20px;
+    overflow-x: hidden;
+}
+
+.tooltip-text {
+    position: absolute;
+    z-index: 1;
+    display: none;
+    background: #eee;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 3px; 
+    transition: opacity 1s ease-out;
+}
+.fa {
+    transition: .5s ease-in-out;
+}
+
+.fa.fa-question-circle:hover + .tooltip-text {
+    display: block;
+    color: black;
+    animation: fadeIn 1s;
+}
+@-webkit-keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}  
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+  
+/*EACH WIDGET*/
+  
+.grid-item {
+    border: 1px solid #e5e5e5;
+}
+  
+h2 {
+    font-size: 20px;
+    margin: 15px;
+    font-weight: lighter;
+}
+  
+.data-section {
+    margin: 15px;
+}
+  
+th {
+    padding: 10px;
+    width: 100%;
+}
+  
+td {
+    padding: 10px;
+    width: 100%;
+    border-top: 1px solid #e5e5e5;
+}
+  
+#table-data {
+    display: block;
+    width: 100%;
+    height: 150px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+  
+#summary-charts{
+    display: flex;
+}
+  
+#summary-chart{
+    width: 33.33%;
+}
+  
+#widget-chart{
+    border-bottom: 1px solid #e5e5e5;
+}
+  
+#level-text{
+    display: none;
+}
+
+.grid-item.over{
+    border: 2px dotted #e5e5e5;
+}
+  
+/*RESPONSIVE*/
+  
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+    .content {
+        grid-template-columns: calc(100vw - 230px);
+    }
+    #table-data{
+        height: 125px;
+        font-size: small;
+    }
+    #table-header{
+        font-size: small;
+    }
+    #text-summary {
+        display: none;
+    }
+    #text-chart {
+        display: none;
+    }
+    #widget-chart{
+        padding-bottom: 10px;
+    }
+    #summary-charts{
+        display: inline;
+    }
+    #summary-chart{
+        width: 50%;
+        margin: auto;
+    }
+    #level-text{
+        display: block;
+        text-align: center;
+        margin: auto;
+    }
+    #level-part-widget{
+        display: none;
+    }
+}
+  
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+    .content {
+        grid-template-columns: calc(100vw - 230px);
+    }
+    #table-data{
+        height: 125px;
+        font-size: small;
+    }
+    #table-header{
+        font-size: small;
+    }
+    #text-summary {
+        transform: translate(0%, -380%);
+        text-align: center;
+        font-size: 2.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -410%);
+        text-align: center;
+        font-size: 2.5vw;
+    }
+}
+  
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+    .content {
+        grid-template-columns: calc(100vw - 230px);
+    }
+    #table-data{
+        height: 125px;
+        font-size: medium;
+    }
+    #table-header{
+        font-size: medium;
+    }
+    #text-summary {
+        transform: translate(0%, -400%);
+        text-align: center;
+        font-size: 3vw;
+    }
+    #text-chart {
+        transform: translate(0%, -420%);
+        text-align: center;
+        font-size: 3vw;
+    }
+}
+  
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 1000px) {
+    .content{
+        grid-template-columns: calc(0.5* (100vw - 242px)) calc(0.5* (100vw - 242px));
+    }
+    #table-data{
+        height: 125px;
+        font-size: medium;
+    }
+    #table-header{
+        font-size: medium;
+    }
+    #text-summary {
+        transform: translate(0%, -360%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -380%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+}
+  
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+    .content{
+        grid-template-columns: calc(0.5* (100vw - 242px)) calc(0.5* (100vw - 242px));
+    }
+    #table-data{
+        height: 150px;
+        font-size: medium;
+    }
+    #table-header{
+        font-size: medium;
+    }
+    #text-summary {
+        transform: translate(0%, -430%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -440%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+}
+  
+/*TEXT MEDIA QUERIES*/
+  
+@media only screen and (min-width: 1450px) {
+    #text-summary {
+        transform: translate(0%, -450%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+    #text-chart {
+        transform: translate(0%, -460%);
+        text-align: center;
+        font-size: 1.5vw;
+    }
+}
+
+#cov-graph-1 {
+    left: 17%;
+}
+
+#cov-graph-2 {
+    left: 50%;
+}
+
+#cov-graph-3 {
+    left: 83.5%;
+}
+
+.graph-inner-text{
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 1.5vw;
+}
+
+@media only screen and (max-width: 550px) {
+    .graph-inner-text {
+        top: 60%;
+    }
+}
+
+@media only screen and (min-width: 550px) and (max-width: 700px) {
+    .graph-inner-text {
+        top: 55%;
+    }
+}
+
+@media only screen and (min-width: 700px) and (max-width: 750px) {
+    .graph-inner-text {
+        top: 53%;
+    }
+}
+
+@media only screen and (min-width: 750px) and (max-width: 900px) {
+    .graph-inner-text {
+        top: 54%;
+    }
+}
+
+@media only screen and (min-width: 1300px){
+    .graph-inner-text {
+        top: 49%;
+    }
+}
+
+@media only screen and (min-width: 1500px){
+    .graph-inner-text {
+        top: 47%;
+    }
+}
+
+@media only screen and (min-width: 2200px){
+    .graph-inner-text {
+        top: 45%;
+    }
+}
