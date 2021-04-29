@@ -101,7 +101,25 @@ function getSummaryDiv(info){
     var titleDiv = document.createElement("div");
     var title = document.createElement("h2");
     title.appendChild(document.createTextNode("SUMMARY"));
+
+    var i = document.createElement("i");
+    i.classList.add("fa");
+    i.classList.add("fa-question-circle");
+    i.classList.add("fa-lg");
+    i.style.marginLeft = "15px";
+
+    var span = document.createElement("span");
+    span.classList.add("tooltip-text");
+
+    var img = document.createElement("img");
+    img.setAttribute("src", "plugins/coverage-plugin/level.png");
+    img.setAttribute("width", "500px");
+
+    span.appendChild(img);
+
     titleDiv.appendChild(title);
+    titleDiv.appendChild(i);
+    titleDiv.appendChild(span);
 
     var dataDiv = document.createElement("div");
     dataDiv.setAttribute("class", "data-section");
